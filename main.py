@@ -27,17 +27,19 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
 
 
-        content =  "<form method='post'><label>Message   </label><textarea name='message'cols='60' rows='15'></textarea><br><label>Rorate By </label><input type='number' name='rotation'><input type='submit'></form>"
+        content =  "<form method='post'><label>Message   </label><textarea name='message'cols='60' rows='15'></textarea><br><label>Rotate By </label><input type='number' name='rotation'><input type='submit'></form>"
         header = "<h2 text-align='center'>Web Caesar</h2>"
         self.response.write( header + content)
     def post(self):
         message = self.request.get("message")
         rotation = self.request.get("rotation")
-        encrypted_message = caesar.encrypt(message, rotation)
+        escacaped_mess = cgi.escape(message)
+        encrypted_message = caesar.encrypt(escacaped_mess, rotation)
         escaped_message = cgi.escape(encrypted_message)
         content = build_page(escaped_message)
+        rotaion_form = "<form><label>Rotate By </label><input type='number' name='rotation'><input type='submit'></form"
         header = "<h2>Web Caesar</h2>"
-        self.response.write(header + content)
+        self.response.write(header + content + rotaion_form)
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
 ], debug=True)
